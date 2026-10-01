@@ -1,0 +1,62 @@
+Windows Registry Editor Version 5.00
+
+; Defender offline / static-scan-only configuration.
+; Disables anything that wants the network, the kernel driver, or telemetry.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender]
+"InstallLocation"="C:\\defender\\Platform\\4.18.25010.11-0\\"
+"ProductAppDataPath"="C:\\defender"
+; Override the host's "disabled" state — we WANT Defender to run.
+"DisableAntiSpyware"=dword:00000000
+"DisableAntiVirus"=dword:00000000
+"PassiveMode"=dword:00000000
+"ProductStatus"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Features]
+"TamperProtection"=dword:00000000
+"SenseEnabled"=dword:00000000
+
+; MpEngine ring channels — 0 = release. Defender's config init queries
+; these and treats missing values as fatal in some code paths.
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine]
+"MpEngineRing"=dword:00000000
+"MpCampRing"=dword:00000000
+"MpSignatureRing"=dword:00000000
+"MpEngineRingPlatformVersion"=""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
+"DisableAntiSpyware"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
+"DisableRealtimeMonitoring"=dword:00000001
+"DisableBehaviorMonitoring"=dword:00000001
+"DisableIOAVProtection"=dword:00000001
+"DisableOnAccessProtection"=dword:00000001
+"DisableScanOnRealtimeEnable"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet]
+"DisableBlockAtFirstSeen"=dword:00000001
+"SpynetReporting"=dword:00000000
+"SubmitSamplesConsent"=dword:00000002
+"LocalSettingOverrideSpynetReporting"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Signature Updates]
+"SignatureUpdateInterval"=dword:00000000
+"DisableScheduledSignatureUpdateOnBattery"=dword:00000001
+"FallbackOrder"="FileShares"
+"DefinitionUpdateFileSharesSources"=""
+
+; Tell the engine where to find the VDMs we mirrored from the host.
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Signature Updates]
+"DefinitionsVersion"="1.1.25010.11"
+"SignaturesLastUpdated"=hex(b):00,00,00,00,00,00,00,00
+"SignatureLocation"="C:\\ProgramData\\Microsoft\\Windows Defender\\Definition Updates\\{6956D4E6-F3F2-4977-B859-F60BC5731E6A}"
+"EngineLocation"="C:\\defender\\Platform\\4.18.25010.11-0"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine]
+"MpCloudBlockLevel"=dword:00000000
+"MpBafsExtendedTimeout"=dword:00000000
+
+; Note: shim injection is done via loader.exe (CreateRemoteThread),
+; not AppInit_DLLs. Wine's AppInit_DLLs support is partial. The loader
+; approach is non-invasive (no binary patching) and AV-agnostic.

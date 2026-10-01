@@ -1,0 +1,15 @@
+# Don't ship build artifacts. Exclude shim outputs but KEEP Defender DLLs.
+stubs/**/*.o
+stubs/**/*.dll
+.git
+.gitignore
+build*.log
+smoke*.log
+report*.log
+msmpeng_*.log
+*.md
+!README.md
+!binaries/README.md
+
+# Keep platform binaries (DLLs included)
+!binaries/
